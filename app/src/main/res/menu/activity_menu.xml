@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:id="@+id/menu_myLocation"
+        android:title="Business"
+        android:icon="@drawable/placeholder"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/menu_theme"
+        android:title="Business"
+        android:icon="@drawable/globe"
+        app:showAsAction="always">
+
+    <menu>
+        <item android:id="@+id/menu_theme_street"
+            android:title="Street"
+            app:showAsAction="never"/>
+
+        <item android:id="@+id/menu_theme_light"
+            android:title="Light"
+            app:showAsAction="never"/>
+
+        <item android:id="@+id/menu_theme_dark"
+            android:title="Dark"
+            app:showAsAction="never"/>
+    </menu>
+
+    </item>
+
+    <item android:id="@+id/menu_fav_place_one"
+        android:title="Red River College"
+        app:showAsAction="never"/>
+    <item android:id="@+id/menu_fav_place_two"
+        android:title="Seoul"
+        app:showAsAction="never"/>
+    <item android:id="@+id/menu_fav_place_three"
+        android:title="New York"
+        android:icon="@drawable/globe"
+        app:showAsAction="never"/>
+
+
+</menu>
