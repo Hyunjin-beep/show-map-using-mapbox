@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -28,7 +29,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, PermissionsListener {
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String style;
         switch (item.getItemId()){
             case R.id.menu_myLocation:
                 Location lastKnownLocation = mapboxMap.getLocationComponent().getLastKnownLocation();
@@ -66,26 +68,49 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     CameraPosition position = new CameraPosition.Builder().target(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())).zoom(16).bearing(0).tilt(0).build();
                     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 5000);
                 }
-            case R.id.menu_theme_dark:
-                
+                break;
+
+            case R.id.menu_fav_place_three:
+                CameraPosition newYork = new CameraPosition.Builder().target(new LatLng(40.7128, -74.0060)).zoom(16).bearing(0).tilt(0).build();
+                mapboxMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(newYork), 5000);
+                break;
+
+            case R.id.menu_fav_place_two:
+                CameraPosition seoul = new CameraPosition.Builder().target(new LatLng(37.5665, 126.9780)).zoom(16).bearing(0).tilt(0).build();
+                mapboxMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(seoul), 3000);
+                break;
+
+            case R.id.menu_fav_place_one:
+                CameraPosition belgrade = new CameraPosition.Builder().target(new LatLng(44.8125, 20.4612)).zoom(16).bearing(0).tilt(0).build();
+                mapboxMap.animateCamera(CameraUpdateFactory
+                        .newCameraPosition(belgrade), 3000);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void favLocations(){
+        ArrayList<FaveLocations> list = new ArrayList<FaveLocations>();
+        FaveLocations newYork = new FaveLocations(40.7128, -74.0060, "New York");
+        list.add(newYork);
+    }
+
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
+
         this.mapboxMap = mapboxMap;
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+        mapboxMap.setStyle(Style.DARK, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 enableLocationComponent(style);
-
-
             }
 
         } );
     }
+
 
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(Style loadedMapStyle) {

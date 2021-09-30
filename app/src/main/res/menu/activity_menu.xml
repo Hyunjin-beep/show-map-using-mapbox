@@ -31,7 +31,7 @@
     </item>
 
     <item android:id="@+id/menu_fav_place_one"
-        android:title="Red River College"
+        android:title="Belgrade"
         app:showAsAction="never"/>
     <item android:id="@+id/menu_fav_place_two"
         android:title="Seoul"
