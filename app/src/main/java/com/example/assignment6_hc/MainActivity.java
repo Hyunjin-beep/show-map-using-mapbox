@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        String style;
         switch (item.getItemId()){
             case R.id.menu_myLocation:
                 Location lastKnownLocation = mapboxMap.getLocationComponent().getLastKnownLocation();
@@ -68,6 +67,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     CameraPosition position = new CameraPosition.Builder().target(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())).zoom(16).bearing(0).tilt(0).build();
                     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 5000);
                 }
+                break;
+
+            case R.id.menu_theme_dark:
+                mapboxMap.setStyle(Style.DARK);
+                break;
+
+            case R.id.menu_theme_light:
+                mapboxMap.setStyle(Style.LIGHT);
+                break;
+
+            case R.id.menu_theme_street:
+                mapboxMap.setStyle(Style.MAPBOX_STREETS);
                 break;
 
             case R.id.menu_fav_place_three:
@@ -102,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
         this.mapboxMap = mapboxMap;
-        mapboxMap.setStyle(Style.DARK, new Style.OnStyleLoaded() {
+        mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 enableLocationComponent(style);
