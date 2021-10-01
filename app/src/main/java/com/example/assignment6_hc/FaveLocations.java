@@ -1,18 +1,32 @@
 package com.example.assignment6_hc;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
+
 public class FaveLocations {
-    private double lat;
-    private double lng;
+    private LatLng location;
     private String title;
+    private String image;
 
-    public FaveLocations(double lat, double lng, String title){
-        this.lat = lat;
-        this.lng = lng;
+    public FaveLocations(LatLng location, String title){
+        this.location = location;
         this.title = title;
+        this.image = image;
     }
 
-    public String toString() {
-        return lat + ", " + lng + ", " +title;// your string representation
+    public LatLng getLocation(){
+        return this.location;
     }
+
+    public String getTitle(){
+        return this.title;
+    }
+
+    public String getImage(){
+        return this.image;
+    }
+
+
+
+
 
 }

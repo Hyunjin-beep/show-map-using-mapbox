@@ -14,8 +14,11 @@ import android.widget.Toast;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -38,7 +41,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MapboxMap mapboxMap;
     private PermissionsManager permissionsManager;
     private LocationComponent locationComponent;
-
+    private static final String ICON_ID = "ICON_ID";
+    private static final String LAYER_ID = "LAYER_ID";
+    private static final String SOURCE_ID = "SOURCE_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,19 +109,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void favLocations(){
-        ArrayList<FaveLocations> list = new ArrayList<FaveLocations>();
-        FaveLocations newYork = new FaveLocations(40.7128, -74.0060, "New York");
+        List<FaveLocations> list = new ArrayList<FaveLocations>();
+        FaveLocations newYork = new FaveLocations(new LatLng(40.7128, -74.0060), "New York");
+        FaveLocations seoul = new FaveLocations(new LatLng(37.5665, 126.9780), "New York");
+        FaveLocations belgrade = new FaveLocations(new LatLng(44.8125, 20.4612), "New York");
+
+
         list.add(newYork);
+        list.add(seoul);
+        list.add(belgrade);
+
+        for(int i = 0; i < list.size(); i++){
+            mapboxMap.addMarker(new MarkerOptions().position(list.get(i).getLocation()).title(list.get(i).getTitle()));
+        }
+
+
     }
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-
         this.mapboxMap = mapboxMap;
+
+        mapboxMap.addMarker(new MarkerOptions()
+                .position(new LatLng(40.7128, -74.0060))
+                .title("Eiffel Tower"));
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 enableLocationComponent(style);
+                favLocations();
             }
 
         } );
