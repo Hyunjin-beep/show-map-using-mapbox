@@ -31,10 +31,10 @@
     </item>
 
     <item android:id="@+id/menu_fav_place_one"
-        android:title="Belgrade"
+        android:title="La Sagrada Familia"
         app:showAsAction="never"/>
     <item android:id="@+id/menu_fav_place_two"
-        android:title="Seoul"
+        android:title="N Seoul Tower"
         app:showAsAction="never"/>
     <item android:id="@+id/menu_fav_place_three"
         android:title="New York"

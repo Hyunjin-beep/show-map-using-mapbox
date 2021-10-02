@@ -5,9 +5,9 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 public class FaveLocations {
     private LatLng location;
     private String title;
-    private String image;
+    private int image;
 
-    public FaveLocations(LatLng location, String title){
+    public FaveLocations(LatLng location, String title, int image){
         this.location = location;
         this.title = title;
         this.image = image;
@@ -21,7 +21,7 @@ public class FaveLocations {
         return this.title;
     }
 
-    public String getImage(){
+    public int getImage(){
         return this.image;
     }
 

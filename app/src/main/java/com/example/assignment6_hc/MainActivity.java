@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.graphics.Camera;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,10 +13,9 @@ import android.widget.Toast;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Point;
+
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -34,6 +32,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, PermissionsListener {
 
@@ -57,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
-
 
     }
 
@@ -87,21 +84,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
 
             case R.id.menu_fav_place_three:
-                CameraPosition newYork = new CameraPosition.Builder().target(new LatLng(40.7128, -74.0060)).zoom(16).bearing(0).tilt(0).build();
+                CameraPosition newYork = new CameraPosition.Builder().target(new LatLng(40.7484, -73.9857)).zoom(16).bearing(0).tilt(0).build();
                 mapboxMap.animateCamera(CameraUpdateFactory
                         .newCameraPosition(newYork), 5000);
+
                 break;
 
             case R.id.menu_fav_place_two:
-                CameraPosition seoul = new CameraPosition.Builder().target(new LatLng(37.5665, 126.9780)).zoom(16).bearing(0).tilt(0).build();
+                CameraPosition seoul = new CameraPosition.Builder().target(new LatLng(37.5512, 126.9882)).zoom(16).bearing(0).tilt(0).build();
                 mapboxMap.animateCamera(CameraUpdateFactory
                         .newCameraPosition(seoul), 3000);
                 break;
 
             case R.id.menu_fav_place_one:
-                CameraPosition belgrade = new CameraPosition.Builder().target(new LatLng(44.8125, 20.4612)).zoom(16).bearing(0).tilt(0).build();
+                CameraPosition madrid = new CameraPosition.Builder().target(new LatLng(41.4036, 2.1744)).zoom(16).bearing(0).tilt(0).build();
                 mapboxMap.animateCamera(CameraUpdateFactory
-                        .newCameraPosition(belgrade), 3000);
+                        .newCameraPosition(madrid), 3000);
                 break;
         }
 
@@ -110,17 +108,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void favLocations(){
         List<FaveLocations> list = new ArrayList<FaveLocations>();
-        FaveLocations newYork = new FaveLocations(new LatLng(40.7128, -74.0060), "New York");
-        FaveLocations seoul = new FaveLocations(new LatLng(37.5665, 126.9780), "New York");
-        FaveLocations belgrade = new FaveLocations(new LatLng(44.8125, 20.4612), "New York");
+        FaveLocations newYork = new FaveLocations(new LatLng(40.7484, -73.9857), "Empire State Building", R.drawable.newyork);
+        FaveLocations seoul = new FaveLocations(new LatLng(37.5512, 126.9882), "N Seoul Tower", R.drawable.seoul);
+        FaveLocations madrid = new FaveLocations(new LatLng(41.4036, 2.1744), "La Sagrada Familia", R.drawable.mountain);
+
+
 
 
         list.add(newYork);
         list.add(seoul);
-        list.add(belgrade);
+        list.add(madrid);
 
         for(int i = 0; i < list.size(); i++){
-            mapboxMap.addMarker(new MarkerOptions().position(list.get(i).getLocation()).title(list.get(i).getTitle()));
+            IconFactory iconFactory = IconFactory.getInstance(MainActivity.this);
+            com.mapbox.mapboxsdk.annotations.Icon icon;
+            icon = iconFactory.fromResource(list.get(i).getImage());
+
+            mapboxMap.addMarker(new MarkerOptions().position(list.get(i).getLocation()).setTitle(list.get(i).getTitle()).icon(icon));
         }
 
 
@@ -130,9 +134,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
 
-        mapboxMap.addMarker(new MarkerOptions()
-                .position(new LatLng(40.7128, -74.0060))
-                .title("Eiffel Tower"));
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
