@@ -37,7 +37,7 @@
         android:title="N Seoul Tower"
         app:showAsAction="never"/>
     <item android:id="@+id/menu_fav_place_three"
-        android:title="New York"
+        android:title="Empire State Building"
         android:icon="@drawable/globe"
         app:showAsAction="never"/>
 

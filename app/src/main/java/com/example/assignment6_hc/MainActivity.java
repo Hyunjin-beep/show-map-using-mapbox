@@ -39,10 +39,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MapView mapView;
     private MapboxMap mapboxMap;
     private PermissionsManager permissionsManager;
-    private LocationComponent locationComponent;
-    private static final String ICON_ID = "ICON_ID";
-    private static final String LAYER_ID = "LAYER_ID";
-    private static final String SOURCE_ID = "SOURCE_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +51,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        mapView.getMapAsync(this::onMapReady);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_myLocation:
-                Location lastKnownLocation = mapboxMap.getLocationComponent().getLastKnownLocation();
 
-                if (lastKnownLocation != null){
-                    CameraPosition position = new CameraPosition.Builder().target(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())).zoom(16).bearing(0).tilt(0).build();
-                    mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 5000);
-                }
+        switch (item.getItemId()){
+
+            case R.id.menu_myLocation:
+                mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
+                        enableLocationComponent(style);
+                    }
+
+                } );
+
                 break;
 
             case R.id.menu_theme_dark:
@@ -106,14 +106,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
+        MainActivity.this.mapboxMap = mapboxMap;
+
+        favLocations();
+        CameraPosition position = new CameraPosition.Builder().target(new LatLng(49.900243, -97.141401)).zoom(16).bearing(0).tilt(0).build();
+        mapboxMap.setCameraPosition(position);
+        mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+            }
+
+        } );
+    }
+
+
     private void favLocations(){
         List<FaveLocations> list = new ArrayList<FaveLocations>();
         FaveLocations newYork = new FaveLocations(new LatLng(40.7484, -73.9857), "Empire State Building", R.drawable.newyork);
         FaveLocations seoul = new FaveLocations(new LatLng(37.5512, 126.9882), "N Seoul Tower", R.drawable.seoul);
         FaveLocations madrid = new FaveLocations(new LatLng(41.4036, 2.1744), "La Sagrada Familia", R.drawable.mountain);
-
-
-
 
         list.add(newYork);
         list.add(seoul);
@@ -130,19 +143,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    @Override
-    public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-        this.mapboxMap = mapboxMap;
-
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
-            @Override
-            public void onStyleLoaded(@NonNull Style style) {
-                enableLocationComponent(style);
-                favLocations();
-            }
-
-        } );
-    }
 
 
     @SuppressWarnings( {"MissingPermission"})
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onExplanationNeeded(List<String> list) {
-        Toast.makeText(this, "string.user_location_permission_explanation,", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         } else{
             Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            finish();
+//            finish();
         }
 
     }
@@ -243,5 +243,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onLowMemory();
         mapView.onLowMemory();
     }
+
 
 }
